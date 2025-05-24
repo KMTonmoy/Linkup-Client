@@ -1,12 +1,14 @@
-import Posts from '@/components/Posts'
-import React from 'react'
+import Posts from "@/components/Posts";
+import SocialFeed from "@/components/SocialFeed";
+import React from "react";
 
 const page = () => {
   return (
     <div>
- <Posts/>
-     </div>
-  )
-}
+      <SocialFeed />
+      <Posts />
+    </div>
+  );
+};
 
-export default page
+export default page;
