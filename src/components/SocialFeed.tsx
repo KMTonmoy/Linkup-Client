@@ -1,32 +1,14 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Plus, Video, Image, Smile } from "lucide-react";
 
 const stories = [
-  {
-    name: "Victor Erixon",
-    img: "https://randomuser.me/api/portraits/men/1.jpg",
-  },
-  {
-    name: "Surfiya Zakir",
-    img: "https://randomuser.me/api/portraits/women/44.jpg",
-  },
-  {
-    name: "Goria Coast",
-    img: "https://randomuser.me/api/portraits/women/65.jpg",
-  },
-  {
-    name: "Hurin Seary",
-    img: "https://randomuser.me/api/portraits/men/22.jpg",
-  },
-  {
-    name: "Daniel Wu",
-    img: "https://randomuser.me/api/portraits/men/78.jpg",
-  },
-  {
-    name: "Jessica Lane",
-    img: "https://randomuser.me/api/portraits/women/30.jpg",
-  },
+  { name: "Victor Erixon", img: "https://randomuser.me/api/portraits/men/1.jpg" },
+  { name: "Surfiya Zakir", img: "https://randomuser.me/api/portraits/women/44.jpg" },
+  { name: "Goria Coast", img: "https://randomuser.me/api/portraits/women/65.jpg" },
+  { name: "Hurin Seary", img: "https://randomuser.me/api/portraits/men/22.jpg" },
+  { name: "Daniel Wu", img: "https://randomuser.me/api/portraits/men/78.jpg" },
+  { name: "Jessica Lane", img: "https://randomuser.me/api/portraits/women/30.jpg" },
 ];
 
 export default function SocialFeed() {
@@ -37,26 +19,22 @@ export default function SocialFeed() {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
-    startX.current = e.pageX - (carouselRef.current?.offsetLeft || 0);
-    scrollLeft.current = carouselRef.current?.scrollLeft || 0;
-  };
-
-  const handleMouseLeave = () => {
-    isDragging.current = false;
-  };
-
-  const handleMouseUp = () => {
-    isDragging.current = false;
+    carouselRef.current!.classList.add("cursor-grabbing");
+    startX.current = e.pageX - carouselRef.current!.offsetLeft;
+    scrollLeft.current = carouselRef.current!.scrollLeft;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging.current) return;
     e.preventDefault();
-    const x = e.pageX - (carouselRef.current?.offsetLeft || 0);
-    const walk = (x - startX.current) * 1.5; // Scroll speed multiplier
-    if (carouselRef.current) {
-      carouselRef.current.scrollLeft = scrollLeft.current - walk;
-    }
+    const x = e.pageX - carouselRef.current!.offsetLeft;
+    const walk = (x - startX.current) * 1.2;
+    carouselRef.current!.scrollLeft = scrollLeft.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isDragging.current = false;
+    carouselRef.current!.classList.remove("cursor-grabbing");
   };
 
   return (
@@ -65,11 +43,11 @@ export default function SocialFeed() {
       <div className="overflow-hidden">
         <div
           ref={carouselRef}
-          className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory select-none cursor-grab active:cursor-grabbing"
+          className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory select-none cursor-grab scroll-smooth"
           onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
         >
           {/* Add Story */}
           <div className="w-24 min-w-[6rem] h-40 bg-gray-200 rounded-xl flex flex-col items-center justify-center text-gray-600 shrink-0 snap-start">
@@ -83,16 +61,12 @@ export default function SocialFeed() {
           {stories.map((story, index) => (
             <div
               key={index}
-              className="w-24 min-w-[6rem] h-40 bg-cover bg-center rounded-xl relative shrink-0 snap-start"
+              className="w-24 min-w-[6rem] h-40 bg-cover bg-center rounded-xl relative shrink-0 snap-start transition-all duration-200"
               style={{ backgroundImage: `url(${story.img})` }}
             >
               <div className="absolute bottom-2 left-2">
                 <div className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                  <img
-                    src={story.img}
-                    alt={story.name}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={story.img} alt={story.name} className="w-full h-full object-cover" />
                 </div>
                 <p className="text-white text-xs mt-1">{story.name}</p>
               </div>
