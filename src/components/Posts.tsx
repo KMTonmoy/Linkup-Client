@@ -1,7 +1,8 @@
-'use client';
-import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
-import PostCard from './PostCard';
+"use client";
+
+import React, { useEffect, useState, useCallback } from "react";
+import axios from "axios";
+import PostCard from "./PostCard";
 
 interface Post {
   _id: string;
@@ -50,7 +51,8 @@ const Posts: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios.get<Post[]>('/post.json')
+    axios
+      .get<Post[]>("/post.json")
       .then((res) => {
         const shuffled = shufflePosts(res.data);
         setAllPosts(shuffled);
@@ -58,8 +60,8 @@ const Posts: React.FC = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Error fetching posts:', err);
-        setError('Failed to load posts.');
+        console.error("Error fetching posts:", err);
+        setError("Failed to load posts.");
         setLoading(false);
       });
   }, [shufflePosts]);
@@ -97,8 +99,8 @@ const Posts: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [loadingMore, visiblePosts, loading]);
 
   if (loading)
@@ -111,14 +113,12 @@ const Posts: React.FC = () => {
     );
 
   if (error)
-    return (
-      <div className="text-center mt-10 text-red-500">{error}</div>
-    );
+    return <div className="text-center mt-10 text-red-500">{error}</div>;
 
   return (
     <div className="flex flex-col items-center space-y-6 w-full max-w-xl mx-auto mt-6">
       {visiblePosts.map((post) => (
-        <PostCard key={post._id + '-' + Math.random()} post={post} />
+        <PostCard key={post._id} post={post} />
       ))}
       {loadingMore && (
         <div className="w-full max-w-xl mx-auto p-4">

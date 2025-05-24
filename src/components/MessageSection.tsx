@@ -13,7 +13,6 @@ const friends = [
   'Ana Seary',
 ];
 
-// Example online status: even indexes online, odd offline
 const isOnline = (index: number) => index % 2 === 0;
 
 const MessageSection = () => {
@@ -29,7 +28,6 @@ const MessageSection = () => {
       const open = localStorage.getItem('messageSectionIsOpen');
       setIsOpen(open === 'true');
     };
-
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
@@ -52,7 +50,8 @@ const MessageSection = () => {
       <Toaster position="bottom-right" />
 
       <div
-        className={`fixed top-16 right-0 w-full max-w-sm sm:w-[320px] h-[calc(100vh-64px)] bg-white shadow-lg border-l border-gray-200 z-40 transition-transform duration-300
+        className={`fixed top-16 right-0 h-[calc(100vh-64px)] bg-white shadow-lg border-l border-gray-200 z-40 transition-transform duration-300
+        w-full sm:w-[320px] max-w-full
         ${isOpen ? 'translate-x-0' : 'translate-x-full'}
       `}
       >
@@ -62,7 +61,6 @@ const MessageSection = () => {
         <div className="overflow-y-auto h-full p-4 space-y-4">
           {friends.map((name, idx) => {
             const online = isOnline(idx);
-
             return (
               <button
                 key={idx}

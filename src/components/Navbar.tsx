@@ -84,7 +84,7 @@ const Navbar: FC = () => {
   ];
 
   return (
-    <header className="bg-white shadow-md px-4 sm:px-6 py-3 relative z-50">
+    <header className="bg-white  shadow-md px-4 sm:px-6 py-3 relative z-50">
       {/* Mobile Header */}
       <div className="md:hidden">
         <div className="flex items-center justify-between mb-2">

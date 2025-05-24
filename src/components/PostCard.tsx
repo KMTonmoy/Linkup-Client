@@ -1,20 +1,15 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
-import {
-  ThumbsUp,
-  Heart,
-  MessageCircle,
-  Share2,
-  Send,
-} from "lucide-react";
+import { ThumbsUp, Heart, MessageCircle, Share2, Send } from "lucide-react";
 import axios from "axios";
 
 interface Post {
   _id: string;
   text: string;
   image: string;
-  likes: number; // original likes count (can be ignored if using live)
-  comments: number; // original comments count (can be ignored if using live)
+  likes: number;
+  comments: number;
   shares: number;
   authorName: string;
   userImage: string;
@@ -34,7 +29,7 @@ interface CommentType {
 
 interface LikeType {
   _id: string;
-  post_id: string;  
+  post_id: string;
   userName: string;
   userPhoto: string;
   likedAt: string;
@@ -49,7 +44,6 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loadingComments, setLoadingComments] = useState(false);
-
   const [likes, setLikes] = useState<LikeType[]>([]);
   const [loadingLikes, setLoadingLikes] = useState(false);
 
@@ -59,11 +53,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     day: "numeric",
   });
 
-  // Fetch comments for this post
   const fetchComments = () => {
     setLoadingComments(true);
     axios
-      .get<CommentType[]>("/comment.json")  
+      .get<CommentType[]>("/comment.json")
       .then((res) => {
         const filteredComments = res.data.filter((c) => c.post_id === post._id);
         setComments(filteredComments);
@@ -74,11 +67,10 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       .finally(() => setLoadingComments(false));
   };
 
-  // Fetch likes for this post
   const fetchLikes = () => {
     setLoadingLikes(true);
     axios
-      .get<LikeType[]>("/Like.json")  
+      .get<LikeType[]>("/Like.json")
       .then((res) => {
         const filteredLikes = res.data.filter((like) => like.post_id === post._id);
         setLikes(filteredLikes);
@@ -89,7 +81,6 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       .finally(() => setLoadingLikes(false));
   };
 
-  // Add new comment locally (no backend persistence here)
   const handleCommentSubmit = () => {
     if (newComment.trim() === "") return;
 
@@ -108,13 +99,11 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     setNewComment("");
   };
 
-  // Fetch likes and comments once on mount & when post._id changes
   useEffect(() => {
     fetchComments();
     fetchLikes();
   }, [post._id]);
 
-  // Refetch comments when comment section is opened
   useEffect(() => {
     if (commentsOpen) {
       fetchComments();
@@ -122,8 +111,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   }, [commentsOpen]);
 
   return (
-    <div className="bg-white shadow-md rounded-xl p-4 w-full max-w-xl mx-auto my-4">
-      {/* Post Header */}
+    <div className="bg-white shadow-md rounded-xl p-4 sm:p-6 w-full max-w-xl mx-auto my-4">
       <div className="flex items-center gap-3 mb-4">
         <img
           src={post.userImage}
@@ -131,36 +119,36 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           className="w-10 h-10 rounded-full object-cover"
         />
         <div>
-          <p className="font-semibold text-gray-800">{post.authorName}</p>
+          <p className="font-semibold text-sm sm:text-base text-gray-800">
+            {post.authorName}
+          </p>
           <p className="text-xs text-gray-500">{formattedDate}</p>
         </div>
       </div>
 
-      {/* Post Text */}
       {post.text && (
-        <div className="text-gray-700 font-medium mb-3">{post.text}</div>
+        <div className="text-sm sm:text-base text-gray-700 font-medium mb-3">
+          {post.text}
+        </div>
       )}
 
-      {/* Post Image */}
       {post.image && (
-        <div className="rounded-lg overflow-hidden">
+        <div className="rounded-lg overflow-hidden max-h-[400px] sm:max-h-[500px]">
           <img
             src={post.image}
             alt="Post visual"
-            className="w-full h-auto object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
       )}
 
-      {/* Post Stats */}
-      <div className="flex items-center justify-between mt-3 text-sm text-gray-500">
+      <div className="flex flex-wrap justify-between items-center mt-3 text-xs sm:text-sm text-gray-500 gap-y-1">
         <span>{loadingLikes ? "Loading..." : likes.length} Likes</span>
         <span>{comments.length} Comments</span>
         <span>{post.shares} Shares</span>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex justify-around mt-2 border-t border-b py-2 text-sm">
+      <div className="flex flex-wrap justify-around mt-3 border-t border-b py-2 text-sm">
         <button className="flex items-center gap-1 text-gray-600 hover:text-indigo-600 transition">
           <ThumbsUp size={18} /> Like
         </button>
@@ -178,11 +166,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         </button>
       </div>
 
-      {/* Comments Section */}
       {commentsOpen && (
         <div className="mt-4 space-y-4">
-          {/* Comment Input */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-start gap-2 sm:gap-3">
             <img
               src="https://i.pravatar.cc/40?img=3"
               alt="User"
@@ -194,19 +180,17 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Write a comment..."
-                className="w-full pl-4 pr-10 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-4 pr-10 py-2 border rounded-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <button
                 onClick={handleCommentSubmit}
                 className="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-500 hover:text-indigo-600"
-                aria-label="Send comment"
               >
                 <Send size={18} />
               </button>
             </div>
           </div>
 
-          {/* Comment List */}
           {loadingComments ? (
             <div className="text-center text-gray-500">Loading comments...</div>
           ) : comments.length === 0 ? (
@@ -214,13 +198,13 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           ) : (
             <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
               {comments.map((c) => (
-                <div key={c._id} className="flex items-start gap-3">
+                <div key={c._id} className="flex items-start gap-2 sm:gap-3">
                   <img
                     src={c.commentAuthorPhoto}
                     alt={c.commentAuthorName}
                     className="w-8 h-8 rounded-full"
                   />
-                  <div className="bg-gray-100 p-2 rounded-xl max-w-xs">
+                  <div className="bg-gray-100 p-2 rounded-xl max-w-[90%]">
                     <p className="text-sm font-semibold text-gray-700">
                       {c.commentAuthorName}
                     </p>
