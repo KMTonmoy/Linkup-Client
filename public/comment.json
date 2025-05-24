@@ -11,6 +11,17 @@
     "commentDate": "2025-05-20T14:35:00Z"
   },
   {
+    "_id": "cmt0011",
+    "post_id": "66506e80a1a1aa001a1a1001",
+    "postAuthorName": "Alice Johnson",
+    "postAuthorEmail": "alice@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=10",
+    "commentAuthorName": "John Doe",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=1",
+    "commentText": "Great post! Really Love reading it.",
+    "commentDate": "2025-05-20T14:35:00Z"
+  },
+  {
     "_id": "cmt002",
     "post_id": "66506e80a1a1aa001a1a1002",
     "postAuthorName": "Alice Johnson",
