@@ -1,0 +1,112 @@
+[
+  {
+    "_id": "cmt001",
+    "post_id": "66506e80a1a1aa001a1a1001",
+    "postAuthorName": "Alice Johnson",
+    "postAuthorEmail": "alice@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=10",
+    "commentAuthorName": "John Doe",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=1",
+    "commentText": "Great post! Really enjoyed reading it.",
+    "commentDate": "2025-05-20T14:35:00Z"
+  },
+  {
+    "_id": "cmt002",
+    "post_id": "66506e80a1a1aa001a1a1002",
+    "postAuthorName": "Alice Johnson",
+    "postAuthorEmail": "alice@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=10",
+    "commentAuthorName": "Sarah Lee",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=2",
+    "commentText": "Thanks for sharing this information!",
+    "commentDate": "2025-05-21T09:12:00Z"
+  },
+  {
+    "_id": "cmt003",
+    "post_id": "66506e80a1a1aa001a1a1003",
+    "postAuthorName": "Bob Smith",
+    "postAuthorEmail": "bob@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=20",
+    "commentAuthorName": "Emily Clark",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=3",
+    "commentText": "I found this post very helpful, cheers!",
+    "commentDate": "2025-05-22T11:00:00Z"
+  },
+  {
+    "_id": "cmt004",
+    "post_id": "66506e80a1a1aa001a1a1004",
+    "postAuthorName": "Bob Smith",
+    "postAuthorEmail": "bob@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=20",
+    "commentAuthorName": "Michael Brown",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=4",
+    "commentText": "Can you provide more details on this topic?",
+    "commentDate": "2025-05-22T15:45:00Z"
+  },
+  {
+    "_id": "cmt005",
+    "post_id": "66506e80a1a1aa001a1a1005",
+    "postAuthorName": "Cathy Green",
+    "postAuthorEmail": "cathy@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=30",
+    "commentAuthorName": "David Wilson",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=5",
+    "commentText": "Awesome content, thank you!",
+    "commentDate": "2025-05-23T08:30:00Z"
+  },
+  {
+    "_id": "cmt006",
+    "post_id": "66506e80a1a1aa001a1a1006",
+    "postAuthorName": "Cathy Green",
+    "postAuthorEmail": "cathy@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=30",
+    "commentAuthorName": "Laura King",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=6",
+    "commentText": "Looking forward to your next post.",
+    "commentDate": "2025-05-23T10:10:00Z"
+  },
+  {
+    "_id": "cmt007",
+    "post_id": "66506e80a1a1aa001a1a1007",
+    "postAuthorName": "David Lee",
+    "postAuthorEmail": "david@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=40",
+    "commentAuthorName": "Anna Scott",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=7",
+    "commentText": "This was very insightful, thanks!",
+    "commentDate": "2025-05-24T13:00:00Z"
+  },
+  {
+    "_id": "cmt008",
+    "post_id": "66506e80a1a1aa001a1a1008",
+    "postAuthorName": "David Lee",
+    "postAuthorEmail": "david@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=40",
+    "commentAuthorName": "Mark Evans",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=8",
+    "commentText": "Could you clarify the second point?",
+    "commentDate": "2025-05-24T14:15:00Z"
+  },
+  {
+    "_id": "cmt009",
+    "post_id": "66506e80a1a1aa001a1a1009",
+    "postAuthorName": "Eva White",
+    "postAuthorEmail": "eva@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=50",
+    "commentAuthorName": "Chris Turner",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=9",
+    "commentText": "Interesting perspective, thanks for sharing!",
+    "commentDate": "2025-05-25T09:20:00Z"
+  },
+  {
+    "_id": "cmt010",
+    "post_id": "66506e80a1a1aa001a1a1010",
+    "postAuthorName": "Eva White",
+    "postAuthorEmail": "eva@example.com",
+    "postAuthorPhoto": "https://i.pravatar.cc/40?img=50",
+    "commentAuthorName": "Nancy Hill",
+    "commentAuthorPhoto": "https://i.pravatar.cc/40?img=11",
+    "commentText": "I enjoyed this post a lot!",
+    "commentDate": "2025-05-25T10:50:00Z"
+  }
+]

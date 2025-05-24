@@ -29,18 +29,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}
       >
-        {/* Fixed Navbar */}
-        <div className="sticky top-0 z-50 bg-white shadow-sm">
+         <div className="sticky   top-0 z-50 bg-white shadow-sm">
           <Navbar />
         </div>
 
-        {/* Main content with MessageSection */}
-        <div className="relative flex min-h-[calc(100vh-64px)]">
-          {/* Page Content */}
-          <main className="flex-1 px-4 md:px-8 pt-4">{children}</main>
+         <div className="relative mt-20 flex min-h-[calc(100vh-64px)]">
+           <main className="flex-1 px-4 md:px-8 pt-4">{children}</main>
 
-          {/* Slide-in Message Panel */}
-          <MessageSection />
+           <MessageSection />
         </div>
       </body>
     </html>
