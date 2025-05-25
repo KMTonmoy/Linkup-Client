@@ -1,8 +1,9 @@
+"use client";
+
 import Posts from "@/components/Posts";
 import SocialFeed from "@/components/SocialFeed";
-import React from "react";
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       <SocialFeed />
@@ -11,4 +12,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

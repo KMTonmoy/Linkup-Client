@@ -111,7 +111,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   }, [commentsOpen]);
 
   return (
-    <div className="bg-white shadow-md rounded-xl p-4 sm:p-6 w-full max-w-xl mx-auto my-4">
+    <div className="font-montserrat bg-white shadow-md rounded-xl p-4 sm:p-6 w-full max-w-xl mx-auto my-4">
       <div className="flex items-center gap-3 mb-4">
         <img
           src={post.userImage}

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { FC, useEffect, useState, useRef } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { FC, useEffect, useState, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Bell,
   MessageSquare,
@@ -10,9 +10,8 @@ import {
   Home,
   Zap,
   Video,
-  Store,
   Users,
-} from 'lucide-react';
+} from "lucide-react";
 
 const Navbar: FC = () => {
   const pathname = usePathname();
@@ -25,18 +24,18 @@ const Navbar: FC = () => {
   const addDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('messageSectionIsOpen');
+    const stored = localStorage.getItem("messageSectionIsOpen");
     if (stored === null) {
       setMessageSectionIsOpen(true);
-      localStorage.setItem('messageSectionIsOpen', 'true');
+      localStorage.setItem("messageSectionIsOpen", "true");
     } else {
-      setMessageSectionIsOpen(stored === 'true');
+      setMessageSectionIsOpen(stored === "true");
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('messageSectionIsOpen', String(messageSectionIsOpen));
-    window.dispatchEvent(new Event('storage'));
+    localStorage.setItem("messageSectionIsOpen", String(messageSectionIsOpen));
+    window.dispatchEvent(new Event("storage"));
   }, [messageSectionIsOpen]);
 
   useEffect(() => {
@@ -55,11 +54,11 @@ const Navbar: FC = () => {
       }
     };
     if (profileDropdownOpen || addDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [profileDropdownOpen, addDropdownOpen]);
 
   const toggleMessages = () => {
@@ -75,12 +74,10 @@ const Navbar: FC = () => {
   };
 
   const navItems = [
-    { id: '/', icon: <Home size={20} />, label: 'Home' },
-    { id: '/stories', icon: <Zap size={20} />, label: 'Stories' },
-    { id: '/videos', icon: <Video size={20} />, label: 'Videos' },
-    { id: '/groups', icon: <Users size={20} />, label: 'Groups' },
-    { id: '/shop', icon: <Store size={20} />, label: 'Shop' },
-    { id: '/settings', icon: <Settings size={20} />, label: 'Settings' },
+    { id: "/", icon: <Home size={20} />, label: "Home" },
+    { id: "/stories", icon: <Zap size={20} />, label: "Stories" },
+    { id: "/groups", icon: <Users size={20} />, label: "Groups" },
+    { id: "/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
 
   return (
@@ -100,7 +97,10 @@ const Navbar: FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center gap-3 relative" ref={addDropdownRef}>
+          <div
+            className="flex items-center gap-3 relative"
+            ref={addDropdownRef}
+          >
             <button
               type="button"
               title="Add New"
@@ -152,7 +152,7 @@ const Navbar: FC = () => {
             >
               <MessageSquare
                 className={`transition-colors w-5 h-5 ${
-                  messageSectionIsOpen ? 'text-indigo-600' : 'text-blue-600'
+                  messageSectionIsOpen ? "text-indigo-600" : "text-blue-600"
                 }`}
               />
             </button>
@@ -175,8 +175,8 @@ const Navbar: FC = () => {
               <div
                 className={`absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 origin-top-right transition-all duration-200 ease-out transform ${
                   profileDropdownOpen
-                    ? 'opacity-100 scale-100 visible'
-                    : 'opacity-0 scale-95 invisible pointer-events-none'
+                    ? "opacity-100 scale-100 visible"
+                    : "opacity-0 scale-95 invisible pointer-events-none"
                 }`}
                 role="menu"
               >
@@ -216,8 +216,8 @@ const Navbar: FC = () => {
                 className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 whitespace-nowrap
                   ${
                     isActive
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-600 font-semibold'
-                      : 'border-gray-300 text-gray-600 hover:bg-indigo-50 hover:border-indigo-400'
+                      ? "border-indigo-600 bg-indigo-50 text-indigo-600 font-semibold"
+                      : "border-gray-300 text-gray-600 hover:bg-indigo-50 hover:border-indigo-400"
                   }`}
                 title={item.label}
               >
@@ -251,8 +251,8 @@ const Navbar: FC = () => {
                 href={item.id}
                 className={`w-12 h-12 flex items-center justify-center rounded-full transition-all duration-300 ${
                   isActive
-                    ? 'bg-indigo-100 text-indigo-600 scale-105 shadow-inner'
-                    : 'bg-gray-100 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50'
+                    ? "bg-indigo-100 text-indigo-600 scale-105 shadow-inner"
+                    : "bg-gray-100 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50"
                 }`}
                 title={item.label}
               >
@@ -262,7 +262,10 @@ const Navbar: FC = () => {
           })}
         </nav>
 
-        <div className="flex items-center gap-4 relative" ref={profileDropdownRef}>
+        <div
+          className="flex items-center gap-4 relative"
+          ref={profileDropdownRef}
+        >
           <div className="relative w-7 h-7">
             <Bell className="text-blue-600 w-7 h-7" />
             <span className="absolute top-0 right-0 w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
@@ -275,7 +278,7 @@ const Navbar: FC = () => {
           >
             <MessageSquare
               className={`transition-colors w-6 h-6 ${
-                messageSectionIsOpen ? 'text-indigo-600' : 'text-blue-600'
+                messageSectionIsOpen ? "text-indigo-600" : "text-blue-600"
               }`}
             />
           </button>
@@ -297,8 +300,8 @@ const Navbar: FC = () => {
           <div
             className={`absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 origin-top-right transition-all duration-200 ease-out transform ${
               profileDropdownOpen
-                ? 'opacity-100 scale-100 visible'
-                : 'opacity-0 scale-95 invisible pointer-events-none'
+                ? "opacity-100 scale-100 visible"
+                : "opacity-0 scale-95 invisible pointer-events-none"
             }`}
             role="menu"
           >
