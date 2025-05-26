@@ -87,7 +87,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logOut = async () => {
     try {
       setLoading(true);
-      await axios.get('http://localhost:8000/logout', {
+      await axios.get('https://linkup-backend-sand.vercel.app/logout', {
         withCredentials: true,
       });
       await signOut(auth);
@@ -116,7 +116,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const saveUser = async (user: User) => {
     try {
       const { data: existingUser } = await axios.get(
-        `http://localhost:8000/users/${user.email}`
+        `https://linkup-backend-sand.vercel.app/users/${user.email}`
       );
 
       if (existingUser) return existingUser;
@@ -129,7 +129,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
 
       const { data } = await axios.put(
-        'http://localhost:8000/user',
+        'https://linkup-backend-sand.vercel.app/user',
         newUser
       );
       return data;

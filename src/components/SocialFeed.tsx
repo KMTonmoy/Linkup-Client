@@ -85,7 +85,7 @@ export default function SocialFeed() {
     };
 
     try {
-      await axios.post("http://localhost:8000/posts", postData);
+      await axios.post("https://linkup-backend-sand.vercel.app/posts", postData);
       toast.success("Post submitted");
       setPostContent("");
       setPhotoURL("");
