@@ -31,7 +31,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   logOut: () => Promise<void>;
   updateUserProfile: (name: string, photo: string) => Promise<void>;
-  setUser?: Dispatch<SetStateAction<User | null>>; // optional if needed in children
+  setUser: Dispatch<SetStateAction<User | null>>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -41,12 +41,12 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const createUser = async (email: string, password: string) => {
-    setLoading(true);
     try {
+      setLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
       router.push('/');
     } catch (error) {
@@ -58,8 +58,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true);
     try {
+      setLoading(true);
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/');
     } catch (error) {
@@ -71,12 +71,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signInWithGoogle = async () => {
-    setLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      setLoading(true);
+      const result = await signInWithPopup(auth, googleProvider);
+      await saveUser(result.user);
       router.push('/');
     } catch (error) {
-      console.error('Error signing in with Google:', error);
+      console.error('Error with Google sign-in:', error);
       throw error;
     } finally {
       setLoading(false);
@@ -84,9 +85,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logOut = async () => {
-    setLoading(true);
     try {
-      await axios.get(`https://way-go-backend.vercel.app/logout`, {
+      setLoading(true);
+      await axios.get('http://localhost:8000/logout', {
         withCredentials: true,
       });
       await signOut(auth);
@@ -107,32 +108,29 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         photoURL: photo,
       });
     } catch (error) {
-      console.error('Error updating user profile:', error);
+      console.error('Error updating profile:', error);
       throw error;
     }
   };
 
   const saveUser = async (user: User) => {
     try {
-      const existingUserResponse = await axios.get(
-        `https://way-go-backend.vercel.app/users/${user?.email}`
+      const { data: existingUser } = await axios.get(
+        `http://localhost:8000/users/${user.email}`
       );
-      const existingUser = existingUserResponse.data;
 
-      if (existingUser) {
-        return existingUser;
-      }
+      if (existingUser) return existingUser;
 
-      const currentUser = {
-        email: user?.email,
-        name: user?.displayName,
-        photo: user?.photoURL,
+      const newUser = {
+        email: user.email,
+        name: user.displayName || '',
+        photo: user.photoURL || '',
         role: 'user',
       };
 
       const { data } = await axios.put(
-        `https://way-go-backend.vercel.app/user`,
-        currentUser
+        'http://localhost:8000/user',
+        newUser
       );
       return data;
     } catch (error) {
@@ -145,13 +143,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setTimeout(async () => {
-          try {
-            await saveUser(currentUser);
-          } catch (error) {
-            console.error('Error handling auth state change:', error);
-          }
-        }, 5000);
+        try {
+          await saveUser(currentUser);
+        } catch (error) {
+          console.error('Error during auth state change:', error);
+        }
       }
       setLoading(false);
     });
@@ -167,6 +163,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     signInWithGoogle,
     logOut,
     updateUserProfile,
+    setUser,
   };
 
   return (

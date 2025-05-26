@@ -1,13 +1,12 @@
-import { initializeApp } from 'firebase/app';
-
+import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAgo3Hj3cXgAKv5udBPVuqkoliAZMuu2YU",
-  authDomain: "waygo-5a34c.firebaseapp.com",
-  projectId: "waygo-5a34c",
-  storageBucket: "waygo-5a34c.appspot.com",
-  messagingSenderId: "201996522770",
-  appId: "1:201996522770:web:cad95e8d632671cc3d0fcb"
+  apiKey: "AIzaSyBbmrH2dxN42IGFEWiyRlLiXMK7saha_lA",
+  authDomain: "linkup-ef604.firebaseapp.com",
+  projectId: "linkup-ef604",
+  storageBucket: "linkup-ef604.firebasestorage.app",
+  messagingSenderId: "575308326652",
+  appId: "1:575308326652:web:12367354dc92827cb09979",
 };
 
 export const app = initializeApp(firebaseConfig);

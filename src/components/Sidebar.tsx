@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -16,6 +16,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { AuthContext } from "@/Provider/AuthProvider";
 
 const newFeeds = [
   {
@@ -47,7 +48,7 @@ const newFeeds = [
 const morePages = [
   {
     icon: <Mail className="text-blue-600" />,
-    label: "Create Gorup",
+    label: "Create Group",
     badge: 584,
     href: "/creategroup",
   },
@@ -79,21 +80,28 @@ const account = [
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const auth = useContext(AuthContext);
+  const user = auth?.user;
+
+  if (!user) return null;
 
   return (
     <>
-      <div className="md:hidden sticky font-opensans   transform -translate-y-1/2  z-20">
-        <button onClick={() => setIsOpen(true)}>
+      {/* Mobile menu button */}
+      <div className="md:hidden sticky top-1/2 transform -translate-y-1/2 z-20 font-opensans">
+        <button onClick={() => setIsOpen(true)} aria-label="Open sidebar menu">
           <Menu className="w-7 h-7 text-gray-800" />
         </button>
       </div>
 
-      <div className="hidden md:block fixed top-[64px] left-0 h-[calc(100vh-64px)] w-64 p-4 space-y-4 bg-white shadow-lg z-40">
+      {/* Desktop sidebar */}
+      <div className="hidden md:block fixed top-[64px] left-0 h-[calc(100vh-64px)] w-64 p-4 space-y-4 bg-white shadow-lg z-40 font-opensans">
         <SidebarSection title="New Feeds" items={newFeeds} />
         <SidebarSection title="More Pages" items={morePages} />
         <SidebarSection title="Account" items={account} />
       </div>
 
+      {/* Mobile sidebar */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -101,10 +109,13 @@ export default function Sidebar() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 left-0 z-50 w-64 h-screen bg-white shadow-lg p-4 overflow-y-auto space-y-4 md:hidden"
+            className="fixed top-0 left-0 z-50 w-64 h-screen bg-white shadow-lg p-4 overflow-y-auto space-y-4 md:hidden font-opensans"
           >
             <div className="flex justify-end mb-4">
-              <button onClick={() => setIsOpen(false)}>
+              <button
+                onClick={() => setIsOpen(false)}
+                aria-label="Close sidebar menu"
+              >
                 <X className="w-6 h-6 text-gray-600" />
               </button>
             </div>
@@ -131,6 +142,11 @@ function SidebarSection({
     href: string;
   }[];
 }) {
+  const auth = useContext(AuthContext);
+  const user = auth?.user;
+
+  if (!user) return null;
+
   return (
     <div className="space-y-3">
       <p className="text-gray-400 font-opensans text-sm mb-2">{title}</p>
@@ -152,7 +168,7 @@ function SidebarSection({
               {item.label}
             </span>
           </Link>
-          {item.badge && (
+          {item.badge !== undefined && (
             <div className="bg-orange-400 text-white text-xs px-2 py-0.5 rounded-full">
               {item.badge}
             </div>

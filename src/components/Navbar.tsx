@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useEffect, useState, useRef } from "react";
+import { FC, useEffect, useState, useRef, useContext } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,30 +12,42 @@ import {
   Video,
   Users,
 } from "lucide-react";
+import { AuthContext } from "@/Provider/AuthProvider";
 
 const Navbar: FC = () => {
+  const auth = useContext(AuthContext);
+  const user = auth?.user;
+  const logOut = auth?.logOut;
+
   const pathname = usePathname();
 
   const [messageSectionIsOpen, setMessageSectionIsOpen] = useState(true);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [addDropdownOpen, setAddDropdownOpen] = useState(false);
 
-  const profileDropdownRef = useRef<HTMLDivElement>(null);
-  const addDropdownRef = useRef<HTMLDivElement>(null);
+  const profileDropdownRef = useRef<HTMLDivElement | null>(null);
+  const addDropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("messageSectionIsOpen");
-    if (stored === null) {
-      setMessageSectionIsOpen(true);
-      localStorage.setItem("messageSectionIsOpen", "true");
-    } else {
-      setMessageSectionIsOpen(stored === "true");
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("messageSectionIsOpen");
+      if (stored === null) {
+        setMessageSectionIsOpen(true);
+        localStorage.setItem("messageSectionIsOpen", "true");
+      } else {
+        setMessageSectionIsOpen(stored === "true");
+      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("messageSectionIsOpen", String(messageSectionIsOpen));
-    window.dispatchEvent(new Event("storage"));
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "messageSectionIsOpen",
+        String(messageSectionIsOpen)
+      );
+      window.dispatchEvent(new Event("storage"));
+    }
   }, [messageSectionIsOpen]);
 
   useEffect(() => {
@@ -58,7 +70,9 @@ const Navbar: FC = () => {
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [profileDropdownOpen, addDropdownOpen]);
 
   const toggleMessages = () => {
@@ -73,6 +87,16 @@ const Navbar: FC = () => {
     setAddDropdownOpen((prev) => !prev);
   };
 
+  const handleLogout = async () => {
+    try {
+      if (logOut) {
+        await logOut();
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+  };
+
   const navItems = [
     { id: "/", icon: <Home size={20} />, label: "Home" },
     { id: "/stories", icon: <Zap size={20} />, label: "Stories" },
@@ -80,9 +104,10 @@ const Navbar: FC = () => {
     { id: "/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
 
-  return (
-    <header className="bg-white  shadow-md px-4 sm:px-6 py-3 relative z-50">
-      {/* Mobile Header */}
+  const userAvatar = user?.photoURL || "/default-avatar.png";
+
+  return user ? (
+    <header className="bg-white shadow-md px-4 sm:px-6 py-3 relative z-50">
       <div className="md:hidden">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2 animate-fade-in">
@@ -102,45 +127,25 @@ const Navbar: FC = () => {
             ref={addDropdownRef}
           >
             <button
-              type="button"
-              title="Add New"
               onClick={toggleAddDropdown}
               className="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xl font-bold hover:bg-indigo-700 transition"
-              aria-haspopup="true"
-              aria-expanded={addDropdownOpen}
             >
               +
             </button>
 
             {addDropdownOpen && (
               <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 origin-top-right z-50">
-                <button
-                  className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700"
-                  onClick={() => setAddDropdownOpen(false)}
-                >
-                  <Zap size={18} />
-                  Post
+                <button className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700">
+                  <Zap size={18} /> Post
                 </button>
-                <button
-                  className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700"
-                  onClick={() => setAddDropdownOpen(false)}
-                >
-                  <Users size={18} />
-                  Story
+                <button className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700">
+                  <Users size={18} /> Story
                 </button>
-                <button
-                  className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700"
-                  onClick={() => setAddDropdownOpen(false)}
-                >
-                  <Video size={18} />
-                  Video
+                <button className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700">
+                  <Video size={18} /> Video
                 </button>
-                <button
-                  className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700"
-                  onClick={() => setAddDropdownOpen(false)}
-                >
-                  <MessageSquare size={18} />
-                  Note
+                <button className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-indigo-100 hover:text-indigo-700">
+                  <MessageSquare size={18} /> Note
                 </button>
               </div>
             )}
@@ -148,7 +153,7 @@ const Navbar: FC = () => {
             <button
               onClick={toggleMessages}
               title="Toggle Messages"
-              className="w-6 h-6 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-6 h-6 flex items-center justify-center rounded-full"
             >
               <MessageSquare
                 className={`transition-colors w-5 h-5 ${
@@ -160,13 +165,10 @@ const Navbar: FC = () => {
             <div className="relative" ref={profileDropdownRef}>
               <button
                 onClick={toggleProfileDropdown}
-                aria-haspopup="true"
-                aria-expanded={profileDropdownOpen}
-                title="User Profile"
-                className="w-7 h-7 rounded-full overflow-hidden border-2 border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-7 h-7 rounded-full overflow-hidden border-2 border-indigo-200"
               >
                 <img
-                  src="https://i.pravatar.cc/32"
+                  src={userAvatar}
                   alt="User Avatar"
                   className="w-full h-full object-cover"
                 />
@@ -178,7 +180,6 @@ const Navbar: FC = () => {
                     ? "opacity-100 scale-100 visible"
                     : "opacity-0 scale-95 invisible pointer-events-none"
                 }`}
-                role="menu"
               >
                 <Link
                   href="/profile"
@@ -195,9 +196,8 @@ const Navbar: FC = () => {
                   Settings
                 </Link>
                 <button
-                  type="button"
+                  onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700"
-                  onClick={() => setProfileDropdownOpen(false)}
                 >
                   Logout
                 </button>
@@ -213,13 +213,11 @@ const Navbar: FC = () => {
               <Link
                 key={item.id}
                 href={item.id}
-                className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 whitespace-nowrap
-                  ${
-                    isActive
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-600 font-semibold"
-                      : "border-gray-300 text-gray-600 hover:bg-indigo-50 hover:border-indigo-400"
-                  }`}
-                title={item.label}
+                className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-full border transition-all duration-300 whitespace-nowrap ${
+                  isActive
+                    ? "border-indigo-600 bg-indigo-50 text-indigo-600 font-semibold"
+                    : "border-gray-300 text-gray-600 hover:bg-indigo-50 hover:border-indigo-400"
+                }`}
               >
                 {item.icon}
               </Link>
@@ -228,7 +226,6 @@ const Navbar: FC = () => {
         </nav>
       </div>
 
-      {/* Desktop Header */}
       <div className="hidden md:flex items-center justify-between">
         <div className="flex items-center gap-2 animate-fade-in">
           <div className="relative w-8 h-8">
@@ -254,7 +251,6 @@ const Navbar: FC = () => {
                     ? "bg-indigo-100 text-indigo-600 scale-105 shadow-inner"
                     : "bg-gray-100 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50"
                 }`}
-                title={item.label}
               >
                 {item.icon}
               </Link>
@@ -273,8 +269,7 @@ const Navbar: FC = () => {
 
           <button
             onClick={toggleMessages}
-            title="Toggle Messages"
-            className="w-7 h-7 flex items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-7 h-7 flex items-center justify-center rounded-full"
           >
             <MessageSquare
               className={`transition-colors w-6 h-6 ${
@@ -285,13 +280,10 @@ const Navbar: FC = () => {
 
           <button
             onClick={toggleProfileDropdown}
-            aria-haspopup="true"
-            aria-expanded={profileDropdownOpen}
-            title="User Profile"
-            className="w-9 h-9 rounded-full overflow-hidden border-2 border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-9 h-9 rounded-full overflow-hidden border-2 border-indigo-200"
           >
             <img
-              src="https://i.pravatar.cc/32"
+              src={userAvatar}
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
@@ -303,7 +295,6 @@ const Navbar: FC = () => {
                 ? "opacity-100 scale-100 visible"
                 : "opacity-0 scale-95 invisible pointer-events-none"
             }`}
-            role="menu"
           >
             <Link
               href="/profile"
@@ -320,9 +311,8 @@ const Navbar: FC = () => {
               Settings
             </Link>
             <button
-              type="button"
+              onClick={handleLogout}
               className="w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100 hover:text-indigo-700"
-              onClick={() => setProfileDropdownOpen(false)}
             >
               Logout
             </button>
@@ -330,6 +320,8 @@ const Navbar: FC = () => {
         </div>
       </div>
     </header>
+  ) : (
+    <></>
   );
 };
 
